@@ -8,30 +8,31 @@
 unsigned int modprod(unsigned int a, unsigned int b, unsigned int p) {
   /* Q1.2: Complete this function */
 unsigned int za, ab;
-za = a %p ;
-ab = 0;
-while(b>0){
-if(b%2 == 1){
-ab = (ab + za)%p;
+za = a %p ;//remainder za
+b = b%p;//remainder b
+ab = 0;//set ab to be 0
+while(b){//while b 
+if(b%2 != 0){//remainder can't be 0
+ab = (ab + za)%p;//modular addition
 }
-za = (za*2)%p;
-b /= 2;
+za = (za*2)%p;//multiply by 2
+b /= 2;//set b
 }
-return ab%p;
+return ab;
 }
 
 //compute a^b mod p safely
 unsigned int modExp(unsigned int a, unsigned int b, unsigned int p) {
   /* Q1.3: Complete this function */
-unsigned int z, aExpb;
-z=a;
-aExpb = 1;
-while(aExpb >0){
-if(b%2 ==1){
- aExpb = (aExpb *z)% p;
+unsigned int z, aExpb;//initiallize variables
+z=a;//set z to be a
+aExpb = 1;//set aExpb to be 1
+while(aExpb >0){//do while aExpb is greater than 0
+if(b%2 ==1){//if remainder is 1
+ aExpb = (aExpb *z)% p;//modprod
 }
-z=(z*z)%p;
-b = b /2;
+z=(z*z)%p;//modprod
+b = b /2;//modprod
 }
 return aExpb % p;
 }
@@ -86,25 +87,25 @@ unsigned int isProbablyPrime(unsigned int N) {
 
   //if we're testing a large number switch to Miller-Rabin primality test
   /* Q2.1: Complete this part of the isProbablyPrime function using the Miller-Rabin pseudo-code */
-  unsigned int r,d;
-  r=0;
-  d = r-1;
-  while(d%2 ==0)
+  unsigned int r,d;//initiallize variables
+  r=0;//set r to be 0 
+  d = r-1;//set d to be r-1
+  while(d%2 ==0)//find d and r
 {
 	r = r+1;
 	d /=2;
 }
-  for (unsigned int n=0;n<NsmallPrimes;n++) {
-unsigned int k = rand()%(N-1) +1;	
-unsigned int x = modExp(k,d,N);
-	if(x==1||x==N-1) continue;
-	for(unsigned int i=0;i<r-1;i++)
-{	x = modprod(x,x,N);
-	if(x==1) return 0;	
-	if(x==N-1) continue;
+  for (unsigned int n=0;n<NsmallPrimes;n++) {//n to the size of the list
+unsigned int k = rand()%(N-1) +1;	//k is a random number
+unsigned int x = modExp(k,d,N);//modulo exponential
+	if(x==1||x==N-1) continue;// if x meets conditions continue loop
+	for(unsigned int i=0;i<r-1;i++)//i til r-1
+{	x = modprod(x,x,N);//modulo multiplication
+	if(x==1) return 0; // return 0 for false
+	if(x==N-1) continue;//if x meets condition continue loop
 	
   }
-return 0;
+return 0;//false
 }
   return 1; //true
 }
@@ -112,19 +113,19 @@ return 0;
 //Finds a generator of Z_p using the assumption that p=2*q+1
 unsigned int findGenerator(unsigned int p) {
   /* Q3.3: complete this function and use the fact that p=2*q+1 to quickly find a generator */
-unsigned int val1,val2,val3,val4,val5, gen,q;
-q=(p-1)/2;
-for(unsigned int i=1;i<p-1;i++)
+unsigned int val1,val2,val3,val4,val5, gen,q;//initiallize variables
+q=(p-1)/2;//q
+for(unsigned int i=1;i<p-1;i++)//generator can be from 1 to p-1
 {
-  val1 = pow(i,q);
+  val1 = pow(i,q);//calculate parameters
   val2 = fmod(val1,p);
   val3 = pow(i,2);
   val4 = fmod(val3,p);
   val5 = fmod(i,p);
-if(val2 !=1 && val4 !=1 && val5 !=0)
+if(val2 !=1 && val4 !=1 && val5 !=0 && i !=2)//tired of seeing 2 as a generator 
 {
-	gen=i;
-	break;
+	gen=i;//set generator to be i if above conditions are met
+	break;//break the loop
 }
 }
 return gen;
