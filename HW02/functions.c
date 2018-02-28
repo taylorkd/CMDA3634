@@ -122,10 +122,10 @@ for(unsigned int i=1;i<p-1;i++)//generator can be from 1 to p-1
   val3 = pow(i,2);
   val4 = fmod(val3,p);
   val5 = fmod(i,p);
-if(val2 !=1 && val4 !=1 && val5 !=0 && i !=2)//tired of seeing 2 as a generator 
+if(val2 !=1 && val4 !=1 && val5 !=0) 
 {
 	gen=i;//set generator to be i if above conditions are met
-	break;//break the loop
+	
 }
 }
 return gen;

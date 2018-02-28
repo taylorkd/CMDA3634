@@ -53,7 +53,24 @@ p=2*q+1;//find p
 	/* Q3.3: use the fact that p=2*q+1 to quickly find a generator */
 	unsigned int g = findGenerator(p);
 
-	printf("g = %u is a generator of Z_%u \n", g, p);  
+	printf("g = %u is a generator of Z_%u \n", g, p);
+//bonus
+unsigned int x,h,t,val1; 
+x = randXbitInt(n);
+while(x>p-1 && x < 0)
+{
+ x = randXbitInt(n);
+}
+h = pow(g,x);
+for(int i=0;i<p-1;i++)
+{
+  val1 = pow(g,i);
+ if( h == val1)
+ x =i;
+ break;
 
-  return 0;
+
+} 
+printf("x= %u is the secret key of Z_%u and generator %u \n",x,p,g);
+return 0;
 }
