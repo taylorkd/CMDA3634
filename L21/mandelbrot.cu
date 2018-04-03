@@ -64,22 +64,22 @@ __device__ int testpoint(complex_t c){
 // Q2c: transform this function into a CUDA kernel
 __global__ void kernelmandelbrot(int Nre, int Nim, complex_t cmin, complex_t cmax, float *count){ 
   int n,m;
-n = threadIdx.x;
-m = blockIdx.x;
+n = threadIdx.x+blockIdx.x*blockDim.x;
+m = threadIdx.y+blockIdx.y*blockDim.y;
   complex_t c;
   c=n+m*Nre*Nim;
   double dr = (cmax.r-cmin.r)/(Nre-1);
   double di = (cmax.i-cmin.i)/(Nim-1);;
 
-  for(n=0;n<Nim;++n){
-    for(m=0;m<Nre;++m){
+  
+    
       c.r = cmin.r + dr*m;
       c.i = cmin.i + di*n;
       
       count[m+n*Nre] = testpoint(c);
       
-    }
-  }
+    
+  
 
 }
 
@@ -121,7 +121,7 @@ Gy = (N+Nthreads-1)/Nthreads;
   clock_t start = clock(); //start time in CPU cycles
 
   // compute mandelbrot set
-kernelmandelbrot << G,B >> mandelbrot(Nre, Nim, cmin, cmax, count); 
+kernelmandelbrot <<< G,B >>>(Nre, Nim, cmin, cmax, count); 
   
 cudaMalloc(&G,Nre*Nim*sizeof(float));
 cudaMalloc(&B,Nre*Nim*sizeof(float));
