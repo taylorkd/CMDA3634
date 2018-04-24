@@ -25,17 +25,18 @@ int main (int argc, char **argv) {
 
   /* Q3.1 Make rank 0 setup the ELGamal system and
     broadcast the public key information */
-if(rank==0){
-  printf("Enter a number of bits: "); fflush(stdout);
-  char status = scanf("%u",&n);
+//if(rank==0){
+  //printf("Enter a number of bits: "); fflush(stdout);
+ // char status = scanf("%u",&n);
 
   //make sure the input makes sense
-  if ((n<3)||(n>31)) {//Updated bounds. 2 is no good, 31 is actually ok
-    printf("Unsupported bit size.\n");
-    return 0;   
-  }
+ // if ((n<3)||(n>31)) {//Updated bounds. 2 is no good, 31 is actually ok
+   // printf("Unsupported bit size.\n");
+   // return 0;   
+ // }
+ n = 5;
   printf("\n");
-}
+//}
   //declare storage for an ElGamal cryptosytem
   unsigned int p, g, h, x;
 

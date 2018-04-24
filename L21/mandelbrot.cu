@@ -19,7 +19,7 @@ To create an image with 4096 x 4096 pixels (last argument will be used to set nu
 #include <stdio.h>
 #include <stdlib.h>
 #include "png_util.h"
-#include "cuda.h"
+
 // Q2a: add include for CUDA header file here:
 
 #define MXITER 1000
@@ -32,7 +32,7 @@ typedef struct {
 }complex_t;
 
 // return iterations before z leaves mandelbrot set for given c
-__device__ int testpoint(complex_t c){
+int testpoint(complex_t c){
   
   int iter;
 
@@ -62,12 +62,16 @@ __device__ int testpoint(complex_t c){
 // record the  iteration counts in the count array
 
 // Q2c: transform this function into a CUDA kernel
-__global__ void kernelmandelbrot(int Nre, int Nim, complex_t cmin, complex_t cmax, float *count){ 
+void  mandelbrot(int Nre, int Nim, complex_t cmin, complex_t cmax, float *count){ 
   int n,m;
+<<<<<<< Updated upstream
 n = threadIdx.x+blockIdx.x*blockDim.x;
 m = threadIdx.y+blockIdx.y*blockDim.y;
+=======
+
+>>>>>>> Stashed changes
   complex_t c;
-  c=n+m*Nre*Nim;
+
   double dr = (cmax.r-cmin.r)/(Nre-1);
   double di = (cmax.i-cmin.i)/(Nim-1);;
 
@@ -94,16 +98,8 @@ int main(int argc, char **argv){
   int Nthreads = atoi(argv[3]);
 
   // Q2b: set the number of threads per block and the number of blocks here:
-float ** array;
-cudaMalloc(&array,Nre*Nim*sizeof(float));
-Bx = Nthreads; 
-By = Nthreads;
-Gx =(N+Nthreads-1)/Nthreads;
-Gy = (N+Nthreads-1)/Nthreads;
- dim3 B(Bx,By,1);
- dim3 G(Gx,Gy,1);
-  // storage for the iteration counts
 
+  // storage for the iteration counts
   float *count = (float*) malloc(Nre*Nim*sizeof(float));
 
   // Parameters for a bounding box for "c" that generates an interesting image
@@ -121,10 +117,12 @@ Gy = (N+Nthreads-1)/Nthreads;
   clock_t start = clock(); //start time in CPU cycles
 
   // compute mandelbrot set
+<<<<<<< Updated upstream
 kernelmandelbrot <<< G,B >>>(Nre, Nim, cmin, cmax, count); 
+=======
+  mandelbrot(Nre, Nim, cmin, cmax, count); 
+>>>>>>> Stashed changes
   
-cudaMalloc(&G,Nre*Nim*sizeof(float));
-cudaMalloc(&B,Nre*Nim*sizeof(float));
   clock_t end = clock(); //start time in CPU cycles
   
   // print elapsed time
